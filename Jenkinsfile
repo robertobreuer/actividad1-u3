@@ -11,17 +11,12 @@ pipeline {
   }
   stages {
     stage('Maven Build') {
-      agent {
-        docker { image 'maven:3.9.6-jdk-17' }
-      }
-      steps {
+      steps {                   
         sh 'mvn clean package -DskipTests'
-        stash includes: 'target/*.jar', name: 'app-jar'
       }
     }
     stage('Docker Build') {
       steps {
-        unstash 'app-jar'
         sh """
           docker build -t ${DOCKER_HUB}:${IMAGE_TAG} .
           docker tag ${DOCKER_HUB}:${IMAGE_TAG} ${DOCKER_HUB}:latest
