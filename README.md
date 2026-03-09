@@ -195,7 +195,7 @@ Respuesta:
 ```
 
 
-# 2026-02-25 Taller DevOps
+# Taller DevOps
 # Laboratorio CI/CD - Aplicación Notificaciones
 
 ## Objetivo
