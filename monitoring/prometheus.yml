@@ -1,0 +1,32 @@
+#version: '3.8'
+services:
+  sonarqube:
+    image: sonarqube:lts-community
+    ports: ['9000:9000']
+    environment: { SONAR_ES_BOOTSTRAP_CHECKS_DISABLE: true }
+  prometheus:
+    image: prom/prometheus:v2.53.0
+    ports: ['9090:9090']
+    volumes:
+      - './prometheus.yml:/etc/prometheus/prometheus.yml'
+      - prometheus_data:/prometheus
+    command: '--config.file=/etc/prometheus/prometheus.yml --storage.tsdb.path=/prometheus'
+  grafana:
+    image: grafana/grafana:11.3.0
+    ports: ['3000:3000']
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: admin
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - './grafana/provisioning:/etc/grafana/provisioning'  
+  node-exporter:
+    image: prom/node-exporter:v1.8.2
+    ports: ['9100:9100']
+    volumes:
+      - '/proc:/host/proc:ro'
+      - '/sys:/host/sys:ro'
+      - '/:/rootfs:ro'
+    command: '--path.procfs=/host/proc --path.sysfs=/host/sys --collector.filesystem.ignored-mount-points="^/(sys|proc|dev|host|etc)($$|/)"'
+volumes:
+  prometheus_data:
+  grafana_data:
