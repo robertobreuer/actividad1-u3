@@ -1,9 +1,8 @@
 pipeline {
-  agent {
-    docker {
-      image 'docker:24.0-dind'
-      args '-v /var/run/docker.sock:/var/run/docker.sock --privileged'
-    }
+  agent any
+  tools {
+    maven 'Maven3'
+    jdk 'JDK17'
   }
   environment {
     DOCKER_HUB = 'robertobreuer/notificaciones'
