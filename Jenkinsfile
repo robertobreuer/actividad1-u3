@@ -7,10 +7,13 @@ pipeline {
   }
   stages {
     stage('Maven Build') {
-      steps {
-        sh 'mvn clean package -DskipTests'
-      }
-    }
+  agent {
+    docker { image 'maven:3.9.6-jdk-17' }
+  }
+  steps {
+    sh 'mvn clean package -DskipTests'
+  }
+}
     stage('Docker Build') {
       steps {
         sh """
